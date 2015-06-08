@@ -42,10 +42,18 @@ public class Draw {
 
                     Random r = new Random();
                     int h = 300;
+<<<<<<< HEAD
 
                     outputQueue = pid.runPID(150,200,1,0.01,1);
 
                     drawingPanel.setOutputQueue(outputQueue);
+=======
+                    int test[] = new int[100];
+                    for(int i=0; i<test.length; i++) {
+                        drawingPanel.addOutput(Math.abs(r.nextInt()) % h);
+                    }
+                  //  drawingPanel.setOutputQueue(outputQueue);
+>>>>>>> origin/master
 
                     drawingPanel.setSetpoint(slider1.getValue());
                     drawingPanel.getTimer().start();
