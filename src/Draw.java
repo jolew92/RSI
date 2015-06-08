@@ -30,19 +30,21 @@ public class Draw {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (!drawingPanel.getIsStarted()) {
+                    PID_Controller pid = new PID_Controller(100000,10000,170);
+
+
                     // wyliczanie wartości kp, ki, kd algorytmu genetycznego
-                    kp.setText(String.valueOf(0.5));
-                    ki.setText(String.valueOf(0.5));
-                    kd.setText(String.valueOf(0.5));
+                   // kp.setText(String.valueOf(0.5));
+                  //  ki.setText(String.valueOf(0.5));
+                   // kd.setText(String.valueOf(0.5));
 
                     outputQueue = new LinkedBlockingQueue<Integer>(780);
-                    //tymczasowo losowo. powinny być outputy z PID
+
                     Random r = new Random();
                     int h = 300;
-                    int test[] = new int[10];
-                    for(int i=0; i<test.length; i++) {
-                        outputQueue.add(Math.abs(r.nextInt()) % h);
-                    }
+
+                    outputQueue = pid.runPID(150,200,1,0.01,1);
+
                     drawingPanel.setOutputQueue(outputQueue);
 
                     drawingPanel.setSetpoint(slider1.getValue());

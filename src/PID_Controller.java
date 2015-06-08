@@ -1,3 +1,5 @@
+import java.util.concurrent.LinkedBlockingQueue;
+
 /**
  * Created by Bartek on 2015-05-31.
  */
@@ -15,7 +17,7 @@ public class PID_Controller {
     private double pNoisePercent = 0.02; // amount of the full range to randomly alter the PV
     private double pNoise = 0;  // random noise added to PV
 
-    private long _timeElapsed = 0;
+    private int _timeElapsed = 0;
     private long _flatErrorTimeElapsed = 0;
     private long _maxTimeAllowed;
     private long _minErrorTimeRequired;
@@ -25,37 +27,39 @@ public class PID_Controller {
 
 
 
-    public PID_Controller(long maxTimeAllowed, long minErrorTimeRequired, float minErrorAllowed, double interval) {
+    public PID_Controller(int maxTimeAllowed, int minErrorTimeRequired, float minErrorAllowed, double interval) {
         _maxTimeAllowed = maxTimeAllowed;
         _minErrorTimeRequired = minErrorTimeRequired;
         _minErrorAllowed = minErrorAllowed;
         pDt = interval;
     }
 
-    public PID_Controller(long maxTimeAllowed, long minErrorTimeRequired, float minErrorAllowed) {
+    public PID_Controller(int maxTimeAllowed, int minErrorTimeRequired, float minErrorAllowed) {
         _maxTimeAllowed = maxTimeAllowed;
         _minErrorTimeRequired = minErrorTimeRequired;
         _minErrorAllowed = minErrorAllowed;
     }
 
-    public long runPID(float startingInput, float expectedOutput, float p, float i, float d) {
+    public LinkedBlockingQueue runPID(float startingInput, float expectedOutput, double p, double i, float d) {
         Kp = p;
         Ki = i;
         Kd = d;
         pSetpoint = startingInput;
         _desiredOutput=expectedOutput;
 
-        while(CheckTimeConditions()) {
+        LinkedBlockingQueue<Integer> tempQueue = new LinkedBlockingQueue<Integer>();
+        while(!IsFinished()) {
             pidStep();
+            tempQueue.add(Math.abs((int) pOutput) % 300);
         }
 
 
-        return _timeElapsed;
+        return tempQueue;
     }
 
-    private boolean CheckTimeConditions() {
-        return (_timeElapsed<=_maxTimeAllowed && _flatErrorTimeElapsed> _minErrorTimeRequired);
-    }
+    private boolean IsFinished() {
+        return (_timeElapsed>=_maxTimeAllowed || _flatErrorTimeElapsed>= _minErrorTimeRequired);
+}
 
 
     private void pidStep()
