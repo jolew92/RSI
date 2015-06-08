@@ -99,7 +99,7 @@ public class Draw {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(800,400);
+        frame.setSize(800,431);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
     }
