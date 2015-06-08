@@ -246,7 +246,7 @@
                       <minimum value="0"/>
                       <paintLabels value="true"/>
                       <paintTicks value="true"/>
-                      <value value="300"/>
+                      <value value="100"/>
                     </properties>
                   </component>
                   <grid id="ef427" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

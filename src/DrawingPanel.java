@@ -55,31 +55,32 @@ public class DrawingPanel extends JPanel implements ActionListener {
         int prevOutput = 0;
         int prevSetpoint = 0;
 
-        Iterator<Integer> iter1 = outputQueue.iterator();
-        Iterator<Integer> iter2 = setpointQueue.iterator();
-        while (iter2.hasNext()) {
-            if(outputQueue.size()<setpointQueue.size())
+        if(isStarted) {
+            Iterator<Integer> iter1 = outputQueue.iterator();
+            Iterator<Integer> iter2 = setpointQueue.iterator();
+            while (iter2.hasNext()) {
+                if (outputQueue.size() < setpointQueue.size())
+                    outputQueue.add(setpoint);
+                int currentOutput = iter1.next();
+                int currentSetpoint = iter2.next();
+                g2d.setPaint(Color.red);
+                g2d.drawLine(i, h - prevOutput, i + 1, h - currentOutput);
+                g2d.setPaint(Color.blue);
+                g2d.drawLine(i, h - prevSetpoint, i + 1, h - currentSetpoint);
+                i += 1;
+                prevOutput = currentOutput;
+                prevSetpoint = currentSetpoint;
+            }
+            if (outputQueue.size() == 780) {
+                outputQueue.remove();
                 outputQueue.add(setpoint);
-            int currentOutput = iter1.next();
-            int currentSetpoint = iter2.next();
-            g2d.setPaint(Color.red);
-            g2d.drawLine(i, h - prevOutput, i + 1, h - currentOutput);
-            g2d.setPaint(Color.blue);
-            g2d.drawLine(i, h - prevSetpoint, i + 1, h - currentSetpoint);
-            i += 1;
-            prevOutput = currentOutput;
-            prevSetpoint = currentSetpoint;
-        }
-        if(outputQueue.size() == 780) {
-            outputQueue.remove();
-            outputQueue.add(setpoint);
-            setpointQueue.remove();
-            setpointQueue.add(setpoint);
-        }
-        else {
-            if(outputQueue.size()<setpointQueue.size())
-                outputQueue.add(setpoint);
-            setpointQueue.add(setpoint);
+                setpointQueue.remove();
+                setpointQueue.add(setpoint);
+            } else {
+                if (outputQueue.size() < setpointQueue.size())
+                    outputQueue.add(setpoint);
+                setpointQueue.add(setpoint);
+            }
         }
     }
 

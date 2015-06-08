@@ -25,6 +25,7 @@ public class Draw {
     public Draw() {
         slider1.setValue(150);
         setpointValueLabel.setText("150");
+        spinner1.setModel(new SpinnerNumberModel(0, 0, 100, 1));
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
