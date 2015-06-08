@@ -11,14 +11,14 @@ public class DrawingPanel extends JPanel implements ActionListener {
     private final int DELAY = 150;
     private Timer timer;
     private int setpoint;
-    private Queue<Integer> randomQueue;
+    private Queue<Integer> outputQueue;
     private Queue<Integer> setpointQueue;
     private boolean isStarted;
 
     public DrawingPanel () {
         initTimer();
         isStarted = false;
-        randomQueue = new LinkedBlockingQueue<Integer>(780);
+        outputQueue = new LinkedBlockingQueue<Integer>(780);
         setpointQueue = new LinkedBlockingQueue<Integer>(780);
     }
 
@@ -52,31 +52,33 @@ public class DrawingPanel extends JPanel implements ActionListener {
         g2d.setBackground(Color.white);
         int h = 300;
         int i = 0;
-        int prevRandom = 0;
+        int prevOutput = 0;
         int prevSetpoint = 0;
 
-        Random r = new Random();
-        Iterator<Integer> iter1 = randomQueue.iterator();
+        Iterator<Integer> iter1 = outputQueue.iterator();
         Iterator<Integer> iter2 = setpointQueue.iterator();
-        while (iter1.hasNext()) {
-            int currentRandom = iter1.next();
+        while (iter2.hasNext()) {
+            if(outputQueue.size()<setpointQueue.size())
+                outputQueue.add(setpoint);
+            int currentOutput = iter1.next();
             int currentSetpoint = iter2.next();
             g2d.setPaint(Color.red);
-            g2d.drawLine(i, h - prevRandom, i + 1, h - currentRandom);
+            g2d.drawLine(i, h - prevOutput, i + 1, h - currentOutput);
             g2d.setPaint(Color.blue);
             g2d.drawLine(i, h - prevSetpoint, i + 1, h - currentSetpoint);
             i += 1;
-            prevRandom = currentRandom;
+            prevOutput = currentOutput;
             prevSetpoint = currentSetpoint;
         }
-        if(randomQueue.size() == 780) {
-            randomQueue.remove();
-            randomQueue.add(Math.abs(r.nextInt()) % h);
+        if(outputQueue.size() == 780) {
+            outputQueue.remove();
+            outputQueue.add(setpoint);
             setpointQueue.remove();
             setpointQueue.add(setpoint);
         }
         else {
-            randomQueue.add(Math.abs(r.nextInt()) % h);
+            if(outputQueue.size()<setpointQueue.size())
+                outputQueue.add(setpoint);
             setpointQueue.add(setpoint);
         }
     }
@@ -91,5 +93,9 @@ public class DrawingPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+    }
+
+    public void setOutputQueue(Queue<Integer> output) {
+        outputQueue = output;
     }
 }
