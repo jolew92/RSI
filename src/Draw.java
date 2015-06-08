@@ -20,6 +20,7 @@ public class Draw {
     private JSlider slider1;
     private JLabel setpointValueLabel;
     private Queue<Integer> outputQueue;
+    private int noiseProcent;
 
     public Draw() {
         slider1.setValue(150);
@@ -70,6 +71,25 @@ public class Draw {
             }
         });
 
+        addNoiseRandomCheckBox.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+               if(addNoiseRandomCheckBox.isSelected())
+                   noiseProcent = (Integer) spinner1.getValue();
+               else
+                   noiseProcent = 0;
+            }
+        });
+
+        spinner1.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if(addNoiseRandomCheckBox.isSelected())
+                    noiseProcent = (Integer) spinner1.getValue();
+                else
+                    noiseProcent = (Integer) spinner1.getValue();
+            }
+        });
     }
 
     public static void main(String[] args) {
