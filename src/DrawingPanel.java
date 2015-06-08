@@ -99,4 +99,8 @@ public class DrawingPanel extends JPanel implements ActionListener {
     public void setOutputQueue(Queue<Integer> output) {
         outputQueue = output;
     }
+
+    public void addOutput(int output) {
+        outputQueue.add(output);
+    }
 }

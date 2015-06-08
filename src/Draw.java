@@ -39,11 +39,11 @@ public class Draw {
                     //tymczasowo losowo. powinny być outputy z PID
                     Random r = new Random();
                     int h = 300;
-                    int test[] = new int[10];
+                    int test[] = new int[100];
                     for(int i=0; i<test.length; i++) {
-                        outputQueue.add(Math.abs(r.nextInt()) % h);
+                        drawingPanel.addOutput(Math.abs(r.nextInt()) % h);
                     }
-                    drawingPanel.setOutputQueue(outputQueue);
+                  //  drawingPanel.setOutputQueue(outputQueue);
 
                     drawingPanel.setSetpoint(slider1.getValue());
                     drawingPanel.getTimer().start();
