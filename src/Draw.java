@@ -45,7 +45,7 @@ public class Draw {
                       //  drawingPanel.addOutput(Math.abs(r.nextInt()) % h);
                     //}
                   //  drawingPanel.setOutputQueue(outputQueue);
-                    outputQueue = pid.runPID(150,200,1,0.01,1);
+                    outputQueue = pid.runPID(150,drawingPanel.getSetpoint(),1,0.01,1);
 
                     drawingPanel.setOutputQueue(outputQueue);
 
@@ -65,14 +65,18 @@ public class Draw {
             @Override
             public void stateChanged(ChangeEvent e) {
                 setpointValueLabel.setText(String.valueOf(slider1.getValue()));
+                drawingPanel.setIsStarted(false);
                 drawingPanel.setSetpoint(slider1.getValue());
-
                 // wyliczanie wartości kp, ki, kd algorytmu genetycznego
                 kp.setText(String.valueOf(0.5));
                 ki.setText(String.valueOf(0.5));
                 kd.setText(String.valueOf(0.5));
-
                 //tymczasowo nic. powinny być outputy z PID tak jak wyżej
+                PID_Controller pid = new PID_Controller(100000,10000,170);
+                outputQueue = new LinkedBlockingQueue<Integer>(100000);
+                outputQueue = pid.runPID(150, drawingPanel.getSetpoint(),1,0.01,1);
+                drawingPanel.setOutputQueue(outputQueue);
+                drawingPanel.setIsStarted(true);
             }
         });
 
