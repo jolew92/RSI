@@ -17,7 +17,7 @@ public class DecimalFormatter
 		this.other_symbols.setDecimalSeparator(decimal_separator.charAt(0));
 		String decimal_format = constructDecimalFormat(decimal_separator,places_before_delimiter,places_after_delimiter);	
 		
-		System.out.println(decimal_format);
+		//System.out.println(decimal_format);
 		this.decimal_format = new DecimalFormat(decimal_format, other_symbols);
 	}
 	

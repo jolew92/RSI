@@ -31,29 +31,23 @@ public class Draw {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (!drawingPanel.getIsStarted()) {
                     PID_Controller pid = new PID_Controller(100000,10000,170);
-
-
                     // wyliczanie wartości kp, ki, kd algorytmu genetycznego
-                   // kp.setText(String.valueOf(0.5));
-                  //  ki.setText(String.valueOf(0.5));
-                   // kd.setText(String.valueOf(0.5));
+                    kp.setText(String.valueOf(0.5));
+                    ki.setText(String.valueOf(0.5));
+                    kd.setText(String.valueOf(0.5));
 
-                    outputQueue = new LinkedBlockingQueue<Integer>(780);
-
-                    Random r = new Random();
-                    int h = 300;
-<<<<<<< HEAD
-
+                    outputQueue = new LinkedBlockingQueue<Integer>(100000);
+                    //tymczasowo losowo. powinny być outputy z PID
+                   // Random r = new Random();
+                    //int h = 300;
+                    //int test[] = new int[100];
+                    //for(int i=0; i<test.length; i++) {
+                      //  drawingPanel.addOutput(Math.abs(r.nextInt()) % h);
+                    //}
+                  //  drawingPanel.setOutputQueue(outputQueue);
                     outputQueue = pid.runPID(150,200,1,0.01,1);
 
                     drawingPanel.setOutputQueue(outputQueue);
-=======
-                    int test[] = new int[100];
-                    for(int i=0; i<test.length; i++) {
-                        drawingPanel.addOutput(Math.abs(r.nextInt()) % h);
-                    }
-                  //  drawingPanel.setOutputQueue(outputQueue);
->>>>>>> origin/master
 
                     drawingPanel.setSetpoint(slider1.getValue());
                     drawingPanel.getTimer().start();

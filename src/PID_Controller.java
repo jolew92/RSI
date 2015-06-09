@@ -59,7 +59,7 @@ public class PID_Controller {
 
     private boolean IsFinished() {
         return (_timeElapsed>=_maxTimeAllowed || _flatErrorTimeElapsed>= _minErrorTimeRequired);
-}
+    }
 
 
     private void pidStep()

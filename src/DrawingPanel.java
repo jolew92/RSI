@@ -12,6 +12,7 @@ public class DrawingPanel extends JPanel implements ActionListener {
     private Timer timer;
     private int setpoint;
     private Queue<Integer> outputQueue;
+    private Queue<Integer> outputNewQueue;
     private Queue<Integer> setpointQueue;
     private boolean isStarted;
 
@@ -58,9 +59,7 @@ public class DrawingPanel extends JPanel implements ActionListener {
         if(isStarted) {
             Iterator<Integer> iter1 = outputQueue.iterator();
             Iterator<Integer> iter2 = setpointQueue.iterator();
-            while (iter2.hasNext()) {
-                if (outputQueue.size() < setpointQueue.size())
-                    outputQueue.add(setpoint);
+            while (iter1.hasNext()) {
                 int currentOutput = iter1.next();
                 int currentSetpoint = iter2.next();
                 g2d.setPaint(Color.red);
@@ -73,12 +72,25 @@ public class DrawingPanel extends JPanel implements ActionListener {
             }
             if (outputQueue.size() == 780) {
                 outputQueue.remove();
-                outputQueue.add(setpoint);
+                Iterator<Integer> iter = outputNewQueue.iterator();
+                if(!iter.hasNext()) {
+                    outputQueue.add(0);
+                }
+                else {
+                    outputQueue.add(iter.next());
+                    outputNewQueue.remove();
+                }
                 setpointQueue.remove();
                 setpointQueue.add(setpoint);
             } else {
-                if (outputQueue.size() < setpointQueue.size())
-                    outputQueue.add(setpoint);
+                Iterator<Integer> iter = outputNewQueue.iterator();
+                if(!iter.hasNext()) {
+                    outputQueue.add(0);
+                }
+                else {
+                    outputQueue.add(iter.next());
+                    outputNewQueue.remove();
+                }
                 setpointQueue.add(setpoint);
             }
         }
@@ -97,7 +109,7 @@ public class DrawingPanel extends JPanel implements ActionListener {
     }
 
     public void setOutputQueue(Queue<Integer> output) {
-        outputQueue = output;
+        outputNewQueue = output;
     }
 
     public void addOutput(int output) {

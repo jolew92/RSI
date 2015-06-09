@@ -1,14 +1,5 @@
 
 
-/*
-Klasa reprezentuje osobnika, tj. wartosci P/I/D regulatora; 
-nadpisany hashcode() / equals() -> przyda sie przy tworzeniu populacji startowej (HashSet),
-HashSet nie jest kolekcją synchronizowana, wiec trzeba bedzie prawdopodobnie zrobic cos takiego
-jak tutaj: 
-
-http://stackoverflow.com/questions/7857702/using-a-synchronizedset-to-synchronize-access-between-two-threads
-
- * */
 public class PID_individual 
 {
 	private float p;
@@ -22,13 +13,10 @@ public class PID_individual
 		this.d = d;
 	}
 
-	
-	/* tak, wiem :D ale z angielska tak sie ona nazywa */
 	public int fintnessFunction()
 	{
 		return -1;
 	}
-	
 	
 	@Override
 	public int hashCode() {
