@@ -107,7 +107,9 @@ public class PID_Controller {
 
     private void calculateNoise() {
         if(pNoisePercent !=0) {
+
             Random rand = new Random();
+            if(pNoisePercent<2) { pNoisePercent=2; }
             int tempVal =  rand.nextInt(pNoisePercent);
             pOutputWithNoiseValue = pOutput*tempVal/300;
         }
