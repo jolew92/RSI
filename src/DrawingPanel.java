@@ -21,6 +21,7 @@ public class DrawingPanel extends JPanel implements ActionListener {
         isStarted = false;
         outputQueue = new LinkedBlockingQueue<Integer>(780);
         setpointQueue = new LinkedBlockingQueue<Integer>(780);
+        outputNewQueue = new LinkedBlockingQueue<Integer>(10000);
     }
 
     private void initTimer() {

@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -12,10 +13,11 @@ public class PID_Controller {
     private double pDerivative = 0;  //(error - prev error) / Delta time
     private double pPreError = 0; // error from last time (previous Error)
     private double Kp = 0.2, Ki = 0.01, Kd = 1; // PID constant multipliers
-    private double pDt = 100.0; // delta time
+    private double pDt = 150.0; // delta time
     private double pOutput = 0; // the drive amount that effects the PV.
-    private double pNoisePercent = 0.02; // amount of the full range to randomly alter the PV
-    private double pNoise = 0;  // random noise added to PV
+    private int pNoisePercent = 0; // amount of the full range to randomly alter the PV
+    private double pOutputWithNoiseValue = 0;  // random noise added to PV
+    private boolean pNoiseEnabled = false;
 
     private int _timeElapsed = 0;
     private long _flatErrorTimeElapsed = 0;
@@ -23,7 +25,7 @@ public class PID_Controller {
     private long _minErrorTimeRequired;
     private float _minErrorAllowed;
     private float _desiredOutput;
-
+    public int sumError;
 
 
 
@@ -44,23 +46,36 @@ public class PID_Controller {
         Kp = p;
         Ki = i;
         Kd = d;
-        pSetpoint = startingInput;
-        _desiredOutput=expectedOutput;
-
+        pPV = startingInput;
+        pSetpoint=expectedOutput;
+        int step = 0;
         LinkedBlockingQueue<Integer> tempQueue = new LinkedBlockingQueue<Integer>();
-        while(!IsFinished()) {
+        System.out.println("Input: "+startingInput+ "; Expected output: "+expectedOutput);
+        while(step<10000) {
+            step+=1;
             pidStep();
-            tempQueue.add(Math.abs((int) pOutput) % 300);
-        }
+            tempQueue.add((int)pPV);
 
+            //tempQueue.add(Math.abs((int) pPV) % 300);
+           // System.out.println(step+". I: "+pIntegral+"; D: "+pDerivative+"; Output: "+pOutput);
+           // System.out.println(step+". Error: "+pError);
+            System.out.println(step+". pPV: "+(pPV));
+        }
 
         return tempQueue;
     }
 
-    private boolean IsFinished() {
-        return (_timeElapsed>=_maxTimeAllowed || _flatErrorTimeElapsed>= _minErrorTimeRequired);
-    }
 
+    public void SetNoise(boolean noiseEnabled, int maxPercentValue) {
+        if(noiseEnabled) {
+            pNoiseEnabled = true;
+            pNoisePercent = maxPercentValue;
+        }
+        else {
+            pNoiseEnabled = false;
+            pNoisePercent = 0;
+        }
+    }
 
     private void pidStep()
     {
@@ -73,18 +88,29 @@ public class PID_Controller {
 
         // calculate how much drive the output in order to get to the
         // desired setpoint.
+        //pOutput = (Kp * pError) + (Ki * pIntegral) + (Kd * pDerivative);
         pOutput = (Kp * pError) + (Ki * pIntegral) + (Kd * pDerivative);
 
         // remember the error for the next time around.
         pPreError = pError;
+        sumError += pError;
+
         _timeElapsed+=pDt;
 
-        if(Math.abs(pError)<=_minErrorAllowed) {
-            _flatErrorTimeElapsed+=pDt;
+        if(pNoiseEnabled) {
+            calculateNoise();
+            pPV = pPV + pOutputWithNoiseValue;
         } else {
-            _flatErrorTimeElapsed = 0;
+            pPV = pPV + pOutput/300; // zobaczylem, ze ta 300 ratuje owiat ;)
         }
+    }
 
+    private void calculateNoise() {
+        if(pNoisePercent !=0) {
+            Random rand = new Random();
+            int tempVal =  rand.nextInt(pNoisePercent);
+            pOutputWithNoiseValue = pOutput*tempVal/300;
+        }
     }
 
 }

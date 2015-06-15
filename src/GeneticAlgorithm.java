@@ -32,16 +32,16 @@ public class GeneticAlgorithm
 		this.number_of_places_after_delimiter = number_of_places_after_delimiter;
 	}
 
-	public void run()
+	public PID_individual[] run()
 	{
 		PID_individual[] population = generateStartPopulation();
 		
 		int generation = 0;
 		while(generation < number_of_generations)
 		{
-			population = selection(population);
-			population = crossover(population);
-			population = mutation(population);
+			population = selection(population);System.out.println(111);
+			population = crossover(population);System.out.println(222);
+			population = mutation(population);System.out.println(333);
 			
 			//Test.printPID_array(population);
 			//System.out.println(generation + "  #########################################################");
@@ -51,7 +51,9 @@ public class GeneticAlgorithm
 			Crossover.clearCounter();
 			//-------------
 			generation++;
+            System.out.println(444);
 		}
+        return population;
 	}
 	
 	private PID_individual[] generateStartPopulation()
@@ -66,115 +68,115 @@ public class GeneticAlgorithm
 		return start_population;
 	}
 	
-//	private PID_individual[] selection(PID_individual[] population)
-//	{
-//		
-//		/* --------------------- POPRAWNE ROZWIAZANIE BEZ WSPOLBIEZNOSCI  -------------- */
-//		PID_individual[] selected = new PID_individual[population.length];
-//		Random r = new Random();
-//		PID_individual first_PID;
-//		PID_individual second_PID;
-//		int first_r;
-//		int second_r;	
-//		
-//		for(int i=0; i<population.length; i++)
-//		{
-//			first_r = r.nextInt(population.length);
-//			second_r = r.nextInt(population.length);
-//			
-//			first_PID = population[first_r];
-//			second_PID = population[second_r];
-//			
-//			selected[i] = first_PID.fintnessFunction() >= second_PID.fintnessFunction() ? first_PID : second_PID;
-//		}
-//		
-//		return selected;
-//	}
-	
 	private PID_individual[] selection(PID_individual[] population)
 	{
-		Selection selection = new Selection();
-		
-		SelectionThread[] selectionThreads = new SelectionThread[ProjectProperties.SELECTION_THREADS_NUMBER];
-		
-		for(int i = 0; i < ProjectProperties.SELECTION_THREADS_NUMBER; i++)
+
+		/* --------------------- POPRAWNE ROZWIAZANIE BEZ WSPOLBIEZNOSCI  -------------- */
+		PID_individual[] selected = new PID_individual[population.length];
+		Random r = new Random();
+		PID_individual first_PID;
+		PID_individual second_PID;
+		int first_r;
+		int second_r;
+
+		for(int i=0; i<population.length; i++)
 		{
-			selectionThreads[i] = new SelectionThread(population);
-		}
-		
-		for(int i = 0; i < ProjectProperties.SELECTION_THREADS_NUMBER; i++)
-		{
-			selectionThreads[i].start();
+			first_r = r.nextInt(population.length);
+			second_r = r.nextInt(population.length);
+
+			first_PID = population[first_r];
+			second_PID = population[second_r];
+
+			selected[i] = first_PID.fintnessFunction() >= second_PID.fintnessFunction() ? first_PID : second_PID;
 		}
 
-		System.out.println("SELECTED POP: " + Selection.population.length);
-		return Selection.population;
+		return selected;
 	}
 	
-	private PID_individual[] crossover(PID_individual[] population)
-	{
-		Crossover crossover = new Crossover();
-		CrossoverThread[] crossoverThreads = new CrossoverThread[ProjectProperties.CROSSOVER_THREADS_NUMBER];
-		
-		for(int i = 0; i < ProjectProperties.CROSSOVER_THREADS_NUMBER; i++)
-		{
-			crossoverThreads[i] = new CrossoverThread(population);
-		}
-		
-		for(int i = 0; i < ProjectProperties.CROSSOVER_THREADS_NUMBER; i++)
-		{
-			crossoverThreads[i].start();
-		}
-		
-		System.out.println("CROSSOV POP: " + Selection.population.length);
-		return Crossover.population;
-	}
-	
+//	private PID_individual[] selection(PID_individual[] population)
+//	{
+//		Selection selection = new Selection();
+//
+//		SelectionThread[] selectionThreads = new SelectionThread[ProjectProperties.SELECTION_THREADS_NUMBER];
+//
+//		for(int i = 0; i < ProjectProperties.SELECTION_THREADS_NUMBER; i++)
+//		{
+//			selectionThreads[i] = new SelectionThread(population);
+//		}
+//
+//		for(int i = 0; i < ProjectProperties.SELECTION_THREADS_NUMBER; i++)
+//		{
+//			selectionThreads[i].start();
+//		}
+//
+//		System.out.println("SELECTED POP: " + Selection.population.length);
+//		return Selection.population;
+//	}
 	
 //	private PID_individual[] crossover(PID_individual[] population)
 //	{
-//		int crossover_position;
-//		Random r = new Random();
-//		int first_r;
-//		int second_r;	
-//		PID_individual firstAdult;
-//		PID_individual secondAdult;
-//		PID_individual[] populationAfterCrossover = new PID_individual[population.length];
-//		
-//		for(int i=0; i<population.length/2; i++)
+//		Crossover crossover = new Crossover();
+//		CrossoverThread[] crossoverThreads = new CrossoverThread[ProjectProperties.CROSSOVER_THREADS_NUMBER];
+//
+//		for(int i = 0; i < ProjectProperties.CROSSOVER_THREADS_NUMBER; i++)
 //		{
-//			first_r = r.nextInt(population.length);
-//			second_r = first_r;
-//			while(first_r != second_r)
-//			{
-//				second_r = r.nextInt(population.length);
-//			}
-//			
-//			firstAdult = population[first_r];
-//			secondAdult = population[second_r];
-//			//nie zachodzi krzyzowanie =
-//			if(r.nextInt(101) > this.crossover_probability)
-//			{
-//				populationAfterCrossover[2*i] = firstAdult;
-//				populationAfterCrossover[(2*i)+1] = secondAdult;
-//			}
-//			else //zachodzi krzyzowanie
-//			{
-//				//dzieci
-//				if(r.nextInt(2) == 0) 
-//				{
-//					populationAfterCrossover[2*i] = new PID_individual(firstAdult.getP(), secondAdult.getI(), secondAdult.getD());
-//					populationAfterCrossover[(2*i)+1] = new PID_individual(secondAdult.getP(), firstAdult.getI(), firstAdult.getD());
-//				}
-//				else 
-//				{
-//					populationAfterCrossover[(2*i)+1] = new PID_individual(firstAdult.getP(), secondAdult.getI(), secondAdult.getD());
-//					populationAfterCrossover[2*i] = new PID_individual(secondAdult.getP(), firstAdult.getI(), firstAdult.getD());
-//				}
-//			}	
+//			crossoverThreads[i] = new CrossoverThread(population);
 //		}
-//		return populationAfterCrossover;
+//
+//		for(int i = 0; i < ProjectProperties.CROSSOVER_THREADS_NUMBER; i++)
+//		{
+//			crossoverThreads[i].start();
+//		}
+//
+//		System.out.println("CROSSOV POP: " + Selection.population.length);
+//		return Crossover.population;
 //	}
+	
+	
+	private PID_individual[] crossover(PID_individual[] population)
+	{
+		int crossover_position;
+		Random r = new Random();
+		int first_r;
+		int second_r;
+		PID_individual firstAdult;
+		PID_individual secondAdult;
+		PID_individual[] populationAfterCrossover = new PID_individual[population.length];
+
+		for(int i=0; i<population.length/2; i++)
+		{
+			first_r = r.nextInt(population.length);
+			second_r = first_r;
+			while(first_r != second_r)
+			{
+				second_r = r.nextInt(population.length);
+			}
+
+			firstAdult = population[first_r];
+			secondAdult = population[second_r];
+			//nie zachodzi krzyzowanie =
+			if(r.nextInt(101) > this.crossover_probability)
+			{
+				populationAfterCrossover[2*i] = firstAdult;
+				populationAfterCrossover[(2*i)+1] = secondAdult;
+			}
+			else //zachodzi krzyzowanie
+			{
+				//dzieci
+				if(r.nextInt(2) == 0)
+				{
+					populationAfterCrossover[2*i] = new PID_individual(firstAdult.getP(), secondAdult.getI(), secondAdult.getD());
+					populationAfterCrossover[(2*i)+1] = new PID_individual(secondAdult.getP(), firstAdult.getI(), firstAdult.getD());
+				}
+				else
+				{
+					populationAfterCrossover[(2*i)+1] = new PID_individual(firstAdult.getP(), secondAdult.getI(), secondAdult.getD());
+					populationAfterCrossover[2*i] = new PID_individual(secondAdult.getP(), firstAdult.getI(), firstAdult.getD());
+				}
+			}
+		}
+		return populationAfterCrossover;
+	}
 	
 	private PID_individual[] mutation(PID_individual[] population)
 	{
