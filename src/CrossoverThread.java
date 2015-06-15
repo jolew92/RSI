@@ -27,7 +27,16 @@ public class CrossoverThread extends Thread
 
 			PID_individual firstAdult = population[first_r];
 			PID_individual secondAdult = population[second_r];	
-			
+
+            if(firstAdult != null)
+            {
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+
+            if(secondAdult != null)
+            {
+                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            }
 			if(random.nextInt(101) > ProjectProperties.CROSSOVER_PROBABILITY)
 			{
 				Crossover.addPair(firstAdult, secondAdult);

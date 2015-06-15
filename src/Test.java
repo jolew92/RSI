@@ -11,9 +11,21 @@ public class Test {
 	}
 	
 	public static void main(String[] args) {
-		
-		GeneticAlgorithm alg = new GeneticAlgorithm(5, 50, 3, 60, 2, 3);
-		alg.run();
+
+        GeneticAlgorithm ga = new GeneticAlgorithm(50, 50, 3, 60, 2, 3);
+        PID_individual[] test = ga.run();
+
+        PID_individual best = test[0];
+
+        for(int i = 0; i < test.length;i++)
+        {
+            if(test[i].fintnessFunction() < best.fintnessFunction())
+            {
+                best = test[i];
+            }
+        }
+
+        System.out.println(best == null);
 
 	}
 }

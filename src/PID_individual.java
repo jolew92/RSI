@@ -15,7 +15,9 @@ public class PID_individual
 
 	public int fintnessFunction()
 	{
-		return -1;
+        PID_Controller pid = new PID_Controller(100000,10000,170);
+        pid.runPID(0,150,p,i,d);
+        return pid.sumError;
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 
 public class ProjectProperties 
 {
-	public static int POPULATION_SIZE = 10000;
+	public static int POPULATION_SIZE = 50;
 	public static int START_POPULATION_THREADS_NUMBER = 500;
 	public static int SELECTION_THREADS_NUMBER = 500;
 	public static int CROSSOVER_THREADS_NUMBER = 500;

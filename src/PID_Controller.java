@@ -15,7 +15,7 @@ public class PID_Controller {
     private double Kp = 0.2, Ki = 0.01, Kd = 1; // PID constant multipliers
     private double pDt = 150.0; // delta time
     private double pOutput = 0; // the drive amount that effects the PV.
-    private int pNoisePercent = 10; // amount of the full range to randomly alter the PV
+    private int pNoisePercent = 0; // amount of the full range to randomly alter the PV
     private double pOutputWithNoiseValue = 0;  // random noise added to PV
     private boolean pNoiseEnabled = false;
 
@@ -25,7 +25,7 @@ public class PID_Controller {
     private long _minErrorTimeRequired;
     private float _minErrorAllowed;
     private float _desiredOutput;
-
+    public int sumError;
 
 
 
@@ -93,6 +93,7 @@ public class PID_Controller {
 
         // remember the error for the next time around.
         pPreError = pError;
+        sumError += pError;
 
         _timeElapsed+=pDt;
 
@@ -100,7 +101,7 @@ public class PID_Controller {
             calculateNoise();
             pPV = pPV + pOutputWithNoiseValue;
         } else {
-            pPV = pPV+pOutput/300; // zobaczylem, ze ta 300 ratuje œwiat ;)
+            pPV = pPV + pOutput/300; // zobaczylem, ze ta 300 ratuje owiat ;)
         }
     }
 

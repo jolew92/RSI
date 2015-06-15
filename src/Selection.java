@@ -12,7 +12,7 @@ public class Selection
 	{
 		if(positionCounter < population.length)
 		{
-			population[positionCounter++] = first_PID.fintnessFunction() >= second_PID.fintnessFunction() ? 
+			population[positionCounter++] = first_PID.fintnessFunction() <= second_PID.fintnessFunction() ?
 					first_PID : second_PID;
 		}	
 	}
